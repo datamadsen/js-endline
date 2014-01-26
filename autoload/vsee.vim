@@ -7,6 +7,7 @@
 " ==============
 
 function! vsee#vimShiftEnterSemicolonOrComma()
+    let b:mode = mode(1)
 
     let b:originalLineNum = line('.')
     let b:originalCursorPosition = getpos('.')
@@ -28,7 +29,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     "   |
     "};
     if b:surroundings == "{}"
-        return s:semicolonEnterBetweenDelimiters()
+        return s:semicolonEnterBetweenDelimiters(b:mode)
     endif
 
     if b:prevLineLastChar == '{'
@@ -41,7 +42,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
         "   |
         " }
         if s:lineContainsFunctionDeclaration(b:prevLine)
-            return s:semicolonEnterAfter()
+            return s:semicolonEnterAfter(b:mode)
         " {
         "   foo: bar|
         " } 
@@ -51,7 +52,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
         "   |
         " }
         elseif b:nextLineFirstChar == '}'
-            return s:commaEnterAfter()
+            return s:commaEnterAfter(b:mode)
         endif
 
     " (
@@ -64,7 +65,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " )
     elseif b:prevLineLastChar == '('
         if b:nextLineFirstChar == ')'
-            return s:commaEnterAfter()
+            return s:commaEnterAfter(b:mode)
         endif
      
     " [
@@ -77,7 +78,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " [
     elseif b:prevLineLastChar == '['
         if b:nextLineFirstChar == ']'
-            return s:commaEnterAfter()
+            return s:commaEnterAfter(b:mode)
         endif
 
     " foo,
@@ -87,7 +88,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " bar,
     " |
     elseif b:prevLineLastChar == ','
-        return s:commaEnterAfter()
+        return s:commaEnterAfter(b:mode)
         
     " foo();
     " bar(|)
@@ -96,7 +97,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " bar();
     " |
     elseif b:prevLineLastChar == ';'
-        return s:semicolonEnterAfter()
+        return s:semicolonEnterAfter(b:mode)
 
     endif
 
@@ -107,22 +108,28 @@ endfunction
 " Helper functions:
 " =================
 
-function! s:commaEnterAfter()
+function! s:commaEnterAfter(mode)
     exec("s/[,;]\\?$/,/e")
-    call feedkeys("A\<CR>")
+    if a:mode == "i"
+        call feedkeys("A\<CR>")
+    endif
     return
 endfunction
 
-function! s:semicolonEnterAfter()
+function! s:semicolonEnterAfter(mode)
     exec("s/[,;]\\?$/;/e")
-    call feedkeys("A\<CR>")
+    if a:mode == "i"
+        call feedkeys("A\<CR>")
+    endif
     return
 endfunction
 
-function! s:semicolonEnterBetweenDelimiters()
+function! s:semicolonEnterBetweenDelimiters(mode)
     exec("s/[,;]\\?$/;/e")
     call setpos('.', b:originalCursorPosition)
-    call feedkeys("a\<CR>")
+    if a:mode == "i"
+        call feedkeys("a\<CR>")
+    endif
     return
 endfunction
 
