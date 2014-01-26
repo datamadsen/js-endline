@@ -22,13 +22,7 @@ function! vsee#vimShiftEnterSemicolonOrComma(mode)
     let b:surroundings = strpart(getline('.'), col('.') -1, 2)
     let delimiters = ["{}", "[]", "()"]
 
-    "{|} 
-    "->
-    "{
-    "   |
-    "};
     if match(delimiters, b:surroundings) != -1
-        let nextLineLastCharsForComma = ["}", "]", ")", ","]
         let prevLineLastCharsForComma = ["{", "[", "(", ","]
     
         if b:prevLineLastChar != ''
@@ -64,27 +58,27 @@ function! vsee#vimShiftEnterSemicolonOrComma(mode)
             return s:commaEnterAfter(a:mode)
         endif
 
-    " (
-    "   foo|
-    " ) 
-    " ->
-    " (
-    "   foo,
-    "   |
-    " )
+        " (
+        "   foo|
+        " ) 
+        " ->
+        " (
+        "   foo,
+        "   |
+        " )
     elseif b:prevLineLastChar == '('
         if b:nextLineFirstChar == ')'
             return s:commaEnterAfter(a:mode)
         endif
      
-    " [
-    "   foo|
-    " ]
-    " ->
-    " [
-    "   foo,
-    "   |
-    " ]
+        " [
+        "   foo|
+        " ]
+        " ->
+        " [
+        "   foo,
+        "   |
+        " ]
     elseif b:prevLineLastChar == '['
         if b:nextLineFirstChar == ']'
             return s:commaEnterAfter(a:mode)
