@@ -20,21 +20,24 @@ function! vsee#vimShiftEnterSemicolonOrComma(mode)
     let b:nextLineFirstChar = matchstr(s:strip(b:nextLine), '^.')
 
     let b:surroundings = strpart(getline('.'), col('.') -1, 2)
+    let delimiters = ["{}", "[]", "()"]
 
     "{|} 
     "->
     "{
     "   |
     "};
-    if b:surroundings == "{}"
-        return s:semicolonEnterBetweenDelimiters(a:mode)
-    endif
-
-    if b:surroundings == "[]"
-        return s:semicolonEnterBetweenDelimiters(a:mode)
-    endif
-
-    if b:surroundings == "()"
+    if match(delimiters, b:surroundings) != -1
+        let nextLineLastCharsForComma = ["}", "]", ")", ","]
+        let prevLineLastCharsForComma = ["{", "[", "(", ","]
+    
+        if b:prevLineLastChar != ''
+            if match(prevLineLastCharsForComma, b:prevLineLastChar) != -1
+                return s:commaEnterBetweenDelimiters(a:mode)
+            else
+                return s:semicolonEnterBetweenDelimiters(a:mode)
+            endif
+        endif
         return s:semicolonEnterBetweenDelimiters(a:mode)
     endif
 
@@ -132,12 +135,21 @@ function! s:semicolonEnterAfter(mode)
     return
 endfunction
 
+function! s:commaEnterBetweenDelimiters(mode)
+    exec("s/[,;]\\?$/,/e")
+    call setpos('.', b:originalCursorPosition)
+    if a:mode == "i"
+        call feedkeys("a\<CR>")
+    endif
+    return
+endfunction
+
 function! s:semicolonEnterBetweenDelimiters(mode)
     exec("s/[,;]\\?$/;/e")
     call setpos('.', b:originalCursorPosition)
-    " if a:mode == "i"
+    if a:mode == "i"
         call feedkeys("a\<CR>")
-    " endif
+    endif
     return
 endfunction
 
