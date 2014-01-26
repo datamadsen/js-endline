@@ -38,6 +38,6 @@ var myMap = {
 You can map both insert and normal mode Shift-Enter to trigger the plugin:
 
 ```vim
-autocmd FileType javascript inoremap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma()<CR>
-autocmd FileType javascript nmap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma()<CR>
+autocmd FileType javascript inoremap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma('i')<CR>
+autocmd FileType javascript nmap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma('n')<CR>
 ```

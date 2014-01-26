@@ -1,14 +1,12 @@
 " Example of how to use:
-" autocmd FileType javascript inoremap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma()<CR>
-" autocmd FileType javascript nmap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma()<CR>
+" autocmd FileType javascript inoremap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma('i')<CR>
+" autocmd FileType javascript nmap <silent> <S-CR> <ESC>:call vsee#vimShiftEnterSemicolonOrComma('n')<CR>
 
 " ==============
 " Main function:
 " ==============
 
-function! vsee#vimShiftEnterSemicolonOrComma()
-    let b:mode = mode(1)
-
+function! vsee#vimShiftEnterSemicolonOrComma(mode)
     let b:originalLineNum = line('.')
     let b:originalCursorPosition = getpos('.')
 
@@ -29,7 +27,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     "   |
     "};
     if b:surroundings == "{}"
-        return s:semicolonEnterBetweenDelimiters(b:mode)
+        return s:semicolonEnterBetweenDelimiters(a:mode)
     endif
 
     if b:prevLineLastChar == '{'
@@ -42,7 +40,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
         "   |
         " }
         if s:lineContainsFunctionDeclaration(b:prevLine)
-            return s:semicolonEnterAfter(b:mode)
+            return s:semicolonEnterAfter(a:mode)
         " {
         "   foo: bar|
         " } 
@@ -52,7 +50,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
         "   |
         " }
         elseif b:nextLineFirstChar == '}'
-            return s:commaEnterAfter(b:mode)
+            return s:commaEnterAfter(a:mode)
         endif
 
     " (
@@ -65,7 +63,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " )
     elseif b:prevLineLastChar == '('
         if b:nextLineFirstChar == ')'
-            return s:commaEnterAfter(b:mode)
+            return s:commaEnterAfter(a:mode)
         endif
      
     " [
@@ -78,7 +76,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " [
     elseif b:prevLineLastChar == '['
         if b:nextLineFirstChar == ']'
-            return s:commaEnterAfter(b:mode)
+            return s:commaEnterAfter(a:mode)
         endif
 
     " foo,
@@ -88,7 +86,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " bar,
     " |
     elseif b:prevLineLastChar == ','
-        return s:commaEnterAfter(b:mode)
+        return s:commaEnterAfter(a:mode)
         
     " foo();
     " bar(|)
@@ -97,7 +95,7 @@ function! vsee#vimShiftEnterSemicolonOrComma()
     " bar();
     " |
     elseif b:prevLineLastChar == ';'
-        return s:semicolonEnterAfter(b:mode)
+        return s:semicolonEnterAfter(a:mode)
 
     endif
 
@@ -110,6 +108,7 @@ endfunction
 
 function! s:commaEnterAfter(mode)
     exec("s/[,;]\\?$/,/e")
+    call setpos('.', b:originalCursorPosition)
     if a:mode == "i"
         call feedkeys("A\<CR>")
     endif
@@ -118,6 +117,7 @@ endfunction
 
 function! s:semicolonEnterAfter(mode)
     exec("s/[,;]\\?$/;/e")
+    call setpos('.', b:originalCursorPosition)
     if a:mode == "i"
         call feedkeys("A\<CR>")
     endif
@@ -125,11 +125,12 @@ function! s:semicolonEnterAfter(mode)
 endfunction
 
 function! s:semicolonEnterBetweenDelimiters(mode)
+    echo a:mode
     exec("s/[,;]\\?$/;/e")
     call setpos('.', b:originalCursorPosition)
-    if a:mode == "i"
+    " if a:mode == "i"
         call feedkeys("a\<CR>")
-    endif
+    " endif
     return
 endfunction
 
