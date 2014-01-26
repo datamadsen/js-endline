@@ -30,6 +30,14 @@ function! vsee#vimShiftEnterSemicolonOrComma(mode)
         return s:semicolonEnterBetweenDelimiters(a:mode)
     endif
 
+    if b:surroundings == "[]"
+        return s:semicolonEnterBetweenDelimiters(a:mode)
+    endif
+
+    if b:surroundings == "()"
+        return s:semicolonEnterBetweenDelimiters(a:mode)
+    endif
+
     if b:prevLineLastChar == '{'
         " function hello(params) {
         "   var foo = params[0|]
@@ -68,12 +76,12 @@ function! vsee#vimShiftEnterSemicolonOrComma(mode)
      
     " [
     "   foo|
-    " [
+    " ]
     " ->
     " [
     "   foo,
     "   |
-    " [
+    " ]
     elseif b:prevLineLastChar == '['
         if b:nextLineFirstChar == ']'
             return s:commaEnterAfter(a:mode)
@@ -125,7 +133,6 @@ function! s:semicolonEnterAfter(mode)
 endfunction
 
 function! s:semicolonEnterBetweenDelimiters(mode)
-    echo a:mode
     exec("s/[,;]\\?$/;/e")
     call setpos('.', b:originalCursorPosition)
     " if a:mode == "i"
