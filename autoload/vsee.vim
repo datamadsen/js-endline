@@ -104,7 +104,7 @@ function! vsee#vimShiftEnterSemicolonOrComma(mode)
 
     endif
 
-    return
+    return s:semicolonEnterAfter(a:mode)
 endfunction
 
 " =================
