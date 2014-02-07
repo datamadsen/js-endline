@@ -15,7 +15,7 @@ function! JSEndline#splitLine()
     let prevLineLastCharsForComma = ["{", "[", "(", ","]
 
     if match(delimiters, surroundings) != -1
-        if b:prevLineLastChar != ''
+        if prevLineLastChar != ''
             if match(prevLineLastCharsForComma, prevLineLastChar) != -1
                 if s:lineContainsFunctionDeclaration(prevLine)
                     return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
@@ -35,7 +35,8 @@ endfunction
 function! JSEndline#newLine()
     let cursorPosition = getpos('.')
 
-    let prevLineLastChar = matchstr(s:getPrevNonBlankLine(line('.')), '.$')
+    let prevLine = s:getPrevNonBlankLine(line('.'))
+    let prevLineLastChar = matchstr(prevLine, '.$')
     let nextLineLastChar = matchstr(s:getNextNonBlankLine(line('.')), '.$')
     let nextLineFirstChar = matchstr(s:strip(s:getNextNonBlankLine(line('.'))), '^.')
 
