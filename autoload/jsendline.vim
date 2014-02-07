@@ -1,7 +1,7 @@
 " Example of how to use:
-autocmd FileType javascript nmap <silent> <S-CR> :call JSEndline#cycle()<CR>
-autocmd FileType javascript inoremap <S-CR> <C-R>=JSEndline#endlineNewLine()<CR>
-autocmd FileType javascript inoremap <CR> <C-R>=JSEndline#endlineOpenLine()<CR>
+"autocmd FileType javascript nmap <silent> <S-CR> :call JSEndline#cycle()<CR>
+"autocmd FileType javascript inoremap <S-CR> <C-R>=JSEndline#endlineNewLine()<CR>
+"autocmd FileType javascript inoremap <CR> <C-R>=JSEndline#endlineOpenLine()<CR>
 
 function! JSEndline#endlineOpenLine()
     let cursorPosition = getpos('.')
