@@ -1,9 +1,9 @@
 " Example of how to use:
 "autocmd FileType javascript nmap <silent> <S-CR> :call JSEndline#cycle()<CR>
-"autocmd FileType javascript inoremap <S-CR> <C-R>=JSEndline#endlineNewLine()<CR>
-"autocmd FileType javascript inoremap <CR> <C-R>=JSEndline#endlineOpenLine()<CR>
+"autocmd FileType javascript inoremap <S-CR> <C-R>=JSEndline#newLine()<CR>
+"autocmd FileType javascript inoremap <CR> <C-R>=JSEndline#splitLine()<CR>
 
-function! JSEndline#endlineOpenLine()
+function! JSEndline#splitLine()
     let cursorPosition = getpos('.')
     let prevLine = s:getPrevNonBlankLine(line('.'))
     let prevLineLastChar = matchstr(prevLine, '.$')
@@ -32,7 +32,7 @@ function! JSEndline#endlineOpenLine()
     return s:replaceAndMove("", cursorPosition, newlineBetweenDelimitersMovement)
 endfunction
 
-function! JSEndline#endlineNewLine()
+function! JSEndline#newLine()
     let cursorPosition = getpos('.')
 
     let prevLineLastChar = matchstr(s:getPrevNonBlankLine(line('.')), '.$')
