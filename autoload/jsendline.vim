@@ -12,11 +12,13 @@ function! JSEndline#splitLine()
     let delimiters = ["{}", "[]", "()"]
 
     let newlineBetweenDelimitersMovement = "\<CR>\<ESC>\<S-o>"
+    let newlineMovement = "\<ESC>A\<CR>"
     let prevLineLastCharsForComma = ["{", "[", "(", ","]
 
     if match(delimiters, surroundings) != -1
         if prevLineLastChar != ''
-            if match(prevLineLastCharsForComma, prevLineLastChar) != -1
+            if prevLineLastChar == ';'
+            elseif match(prevLineLastCharsForComma, prevLineLastChar) != -1
                 if s:lineContainsFunctionDeclaration(prevLine)
                     return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
                 else
@@ -29,7 +31,7 @@ function! JSEndline#splitLine()
             endif
         endif
     endif
-    return s:replaceAndMove("", cursorPosition, newlineBetweenDelimitersMovement)
+    return s:replaceAndMove("", cursorPosition, newlineMovement)
 endfunction
 
 function! JSEndline#newLine()
