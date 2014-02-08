@@ -31,7 +31,7 @@ function! JSEndline#splitLine()
             endif
         endif
     endif
-    return s:replaceAndMove("", cursorPosition, newlineMovement)
+    return s:justMove(cursorPosition, newlineMovement)
 endfunction
 
 function! JSEndline#newLine()
@@ -71,7 +71,7 @@ function! JSEndline#newLine()
         return s:replaceAndMove(";", cursorPosition, movement)
     endif
 
-    return s:replaceAndMove("", cursorPosition, movement)
+    return s:justMove(cursorPosition, movement)
 endfunction
 
 function! JSEndline#cycle()
@@ -97,6 +97,14 @@ endfunction
 " =================
 function! s:replaceAndMove(char, cursorPosition, movement)
     exec("s/[,;]\\?$/" . a:char . "/e")
+    call setpos('.', a:cursorPosition)
+    if mode() == "i"
+        return a:movement
+    endif
+    return
+endfunction
+
+function! s:justMove(cursorPosition, movement)
     call setpos('.', a:cursorPosition)
     if mode() == "i"
         return a:movement
