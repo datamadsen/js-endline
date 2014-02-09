@@ -18,7 +18,7 @@ function! JSEndline#splitLine()
     if match(delimiters, surroundings) != -1
         if prevLineLastChar != ''
             if prevLineLastChar == ';'
-            elseif s:lineContainsFunctionDeclaration(getline(line('.')))
+            elseif !s:lineContainsAssignment(getline(line('.')))
                 return s:justMove(cursorPosition, newlineBetweenDelimitersMovement)
             elseif match(prevLineLastCharsForComma, prevLineLastChar) != -1
                 if s:lineContainsFunctionDeclaration(prevLine)
@@ -33,7 +33,7 @@ function! JSEndline#splitLine()
             endif
         endif
     endif
-    return s:justMove(cursorPosition, newlineMovement)
+    return s:justMove(cursorPosition, newlineBetweenDelimitersMovement)
 endfunction
 
 function! JSEndline#newLine()
@@ -136,6 +136,10 @@ endfunction
 
 function! s:lineContainsFunctionDeclaration(line)
     return s:strip(a:line) =~ '^.*function.*(.*$'
+endfunction
+
+function! s:lineContainsAssignment(line)
+    return s:strip(a:line) =~ '^.*[:=].*$'
 endfunction
 
 function! s:getFutureNonBlankLineNum(lineNum, direction, limitLineNum)
