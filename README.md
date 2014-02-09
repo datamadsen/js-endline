@@ -56,19 +56,19 @@ If the plugin makes the wrong guess, it's possible to cycle through line ending
 characters by pressing <S-CR> in normal mode, like this:
 
 ```javascript
-var myMap = {}; // Press <S-CR>
+var myMap = {}; // Press <S-CR> (in normal mode)
 ```
 becomes:
 ```javascript
-var myMap = {}, // Press <S-CR>
+var myMap = {}, // Press <S-CR> (in normal mode)
 ```
 becomes:
 ```javascript
-var myMap = {} // Press <S-CR>
+var myMap = {} // Press <S-CR> (in normal mode)
 ```
 becomes:
 ```javascript
-var myMap = {}; // Press <S-CR>
+var myMap = {}; // Press <S-CR> (in normal mode)
 ```
 
 And so on.
