@@ -18,6 +18,8 @@ function! JSEndline#splitLine()
     if match(delimiters, surroundings) != -1
         if prevLineLastChar != ''
             if prevLineLastChar == ';'
+            elseif s:lineContainsFunctionDeclaration(getline(line('.')))
+                return s:justMove(cursorPosition, newlineBetweenDelimitersMovement)
             elseif match(prevLineLastCharsForComma, prevLineLastChar) != -1
                 if s:lineContainsFunctionDeclaration(prevLine)
                     return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
