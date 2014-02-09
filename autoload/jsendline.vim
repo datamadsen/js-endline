@@ -16,24 +16,13 @@ function! JSEndline#splitLine()
     let prevLineLastCharsForComma = ["{", "[", "(", ","]
 
     if match(delimiters, surroundings) != -1
-        if prevLineLastChar != ''
-            if prevLineLastChar == ';'
-            elseif !s:lineContainsAssignment(getline(line('.')))
-                return s:justMove(cursorPosition, newlineBetweenDelimitersMovement)
-            elseif match(prevLineLastCharsForComma, prevLineLastChar) != -1
-                if s:lineContainsFunctionDeclaration(prevLine)
-                    return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
-                else
-                    return s:replaceAndMove(",", cursorPosition, newlineBetweenDelimitersMovement)
-                endif
-            else
-                if !s:lineContainsFunctionDeclaration(prevLine)
-                    return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
-                endif
-            endif
+        if match(prevLineLastCharsForComma, prevLineLastChar) != -1
+            return s:replaceAndMove(",", cursorPosition, newlineBetweenDelimitersMovement)
+        else
+            return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
         endif
     endif
-    return s:justMove(cursorPosition, newlineBetweenDelimitersMovement)
+    return s:justMove(cursorPosition, newlineMovement)
 endfunction
 
 function! JSEndline#newLine()
