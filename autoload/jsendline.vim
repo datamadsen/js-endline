@@ -1,5 +1,4 @@
 function! JSEndline#splitLine()
-    echoe "HAAAAAAAAAAAAAA"
     let cursorPosition = getpos('.')
     let prevLine = s:getPrevNonBlankLine(line('.'))
     let prevLineLastChar = matchstr(prevLine, '.$')
