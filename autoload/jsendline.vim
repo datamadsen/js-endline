@@ -1,4 +1,5 @@
 function! JSEndline#splitLine()
+    echoe "HAAAAAAAAAAAAAA"
     let cursorPosition = getpos('.')
     let prevLine = s:getPrevNonBlankLine(line('.'))
     let prevLineLastChar = matchstr(prevLine, '.$')
@@ -141,14 +142,13 @@ endfunction
 
 " Initialization
 if exists('g:jsendline#splitLineMap')
-    autocmd FileType javascript inoremap g:jsendline#splitLineMap <C-R>=JSEndline#splitLine()<CR>
+    exec "autocmd FileType javascript inoremap " . g:jsendline#splitLineMap . " <C-R>=JSEndline#splitLine()<CR>"
 endif
 
 if exists('g:jsendline#newLineMap')
-    autocmd FileType javascript inoremap g:jsendline#newLineMap <C-R>=JSEndline#newLine()<CR>
+    exec "autocmd FileType javascript inoremap " . g:jsendline#newLineMap . " <C-R>=JSEndline#newLine()<CR>"
 endif
 
 if exists('g:jsendline#cycleMap')
-    autocmd FileType javascript nmap <silent> g:jsendline#cycleMap :call JSEndline#cycle()<CR>
+    exec "autocmd FileType javascript nmap <silent> " . g:jsendline#cycleMap . " :call JSEndline#cycle()<CR>"
 endif
-
