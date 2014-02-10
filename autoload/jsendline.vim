@@ -1,8 +1,3 @@
-" Example of how to use:
-"autocmd FileType javascript nmap <silent> <S-CR> :call JSEndline#cycle()<CR>
-"autocmd FileType javascript inoremap <S-CR> <C-R>=JSEndline#newLine()<CR>
-"autocmd FileType javascript inoremap <CR> <C-R>=JSEndline#splitLine()<CR>
-
 function! JSEndline#splitLine()
     let cursorPosition = getpos('.')
     let prevLine = s:getPrevNonBlankLine(line('.'))
@@ -22,7 +17,7 @@ function! JSEndline#splitLine()
             return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
         endif
     endif
-    return s:justMove(cursorPosition, newlineMovement)
+    return g:jsendline#splitLineMap
 endfunction
 
 function! JSEndline#newLine()
@@ -62,7 +57,7 @@ function! JSEndline#newLine()
         return s:replaceAndMove(";", cursorPosition, movement)
     endif
 
-    return s:justMove(cursorPosition, movement)
+    return jsendline#newLineMap
 endfunction
 
 function! JSEndline#cycle()
@@ -81,11 +76,9 @@ function! JSEndline#cycle()
             return s:replaceAndMove(";", cursorPosition, movement)
         endif
     endif
+    return jsendline#cycleMap
 endfunction
 
-" =================
-" Helper functions:
-" =================
 function! s:replaceAndMove(char, cursorPosition, movement)
     exec("s/[,;]\\?$/" . a:char . "/e")
     call setpos('.', a:cursorPosition)
@@ -145,3 +138,17 @@ function! s:getFutureNonBlankLineNum(lineNum, direction, limitLineNum)
 
     return l:futureLineNum
 endfunction
+
+" Initialization
+if exists('g:jsendline#splitLineMap')
+    autocmd FileType javascript inoremap g:jsendline#splitLineMap <C-R>=JSEndline#splitLine()<CR>
+endif
+
+if exists('g:jsendline#newLineMap')
+    autocmd FileType javascript inoremap g:jsendline#newLineMap <C-R>=JSEndline#newLine()<CR>
+endif
+
+if exists('g:jsendline#cycleMap')
+    autocmd FileType javascript nmap <silent> g:jsendline#cycleMap :call JSEndline#cycle()<CR>
+endif
+
