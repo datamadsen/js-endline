@@ -16,9 +16,9 @@ do three things:
 
 You need to map keys yourself, like this:
 ```vim
-autocmd FileType javascript nmap <silent> <S-CR> :call JSEndline#cycle()<CR>
-autocmd FileType javascript inoremap <S-CR> <C-R>=JSEndline#newLine()<CR>
-autocmd FileType javascript inoremap <CR> <C-R>=JSEndline#splitLine()<CR>
+let g:jsendline#splitLineMap="<CR>"
+let g:jsendline#newLineMap="<S-CR>"
+let g:jsendline#cycleMap="<S-CR>"
 ```
 
 With the above mappings, this:
