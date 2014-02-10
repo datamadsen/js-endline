@@ -141,13 +141,13 @@ endfunction
 
 " Initialization
 if exists('g:jsendline#splitLineMap')
-    exec "autocmd FileType javascript inoremap " . g:jsendline#splitLineMap . " <C-R>=JSEndline#splitLine()<CR>"
+    exec "inoremap " . g:jsendline#splitLineMap . " <C-R>=JSEndline#splitLine()<CR>"
 endif
 
 if exists('g:jsendline#newLineMap')
-    exec "autocmd FileType javascript inoremap " . g:jsendline#newLineMap . " <C-R>=JSEndline#newLine()<CR>"
+    exec "inoremap " . g:jsendline#newLineMap . " <C-R>=JSEndline#newLine()<CR>"
 endif
 
 if exists('g:jsendline#cycleMap')
-    exec "autocmd FileType javascript nmap <silent> " . g:jsendline#cycleMap . " :call JSEndline#cycle()<CR>"
+    exec "nmap <silent> " . g:jsendline#cycleMap . " :call JSEndline#cycle()<CR>"
 endif
