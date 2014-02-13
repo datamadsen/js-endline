@@ -3,21 +3,29 @@ function! JSEndline#splitLine()
     let prevLine = s:getPrevNonBlankLine(line('.'))
     let prevLineLastChar = matchstr(prevLine, '.$')
 
+    let currentLineIsBlank = s:strip(getline('.')) == ''
+
     let surroundings = strpart(getline('.'), col('.') -2, 2)
     let delimiters = ["{}", "[]", "()"]
 
     let newlineBetweenDelimitersMovement = "\<CR>\<ESC>\<S-o>"
-    let newlineMovement = "\<ESC>A\<CR>"
     let prevLineLastCharsForComma = ["{", "[", "(", ","]
 
-    if match(delimiters, surroundings) != -1
-        if match(prevLineLastCharsForComma, prevLineLastChar) != -1
-            return s:replaceAndMove(",", cursorPosition, newlineBetweenDelimitersMovement)
-        else
-            return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
+    if !currentLineIsBlank
+        if index(delimiters, surroundings) != -1
+            if index(prevLineLastCharsForComma, prevLineLastChar) != -1
+                if prevLine == ""
+                    return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
+                else
+                    return s:replaceAndMove(",", cursorPosition, newlineBetweenDelimitersMovement)
+                endif
+            else
+                return s:replaceAndMove(";", cursorPosition, newlineBetweenDelimitersMovement)
+            endif
         endif
     endif
-    return g:jsendline#splitLineMap
+
+    return s:justMove(cursorPosition, "\<CR>")
 endfunction
 
 function! JSEndline#newLine()
@@ -57,7 +65,7 @@ function! JSEndline#newLine()
         return s:replaceAndMove(";", cursorPosition, movement)
     endif
 
-    return jsendline#newLineMap
+    return s:justMove(cursorPosition, movement)
 endfunction
 
 function! JSEndline#cycle()
@@ -76,7 +84,6 @@ function! JSEndline#cycle()
             return s:replaceAndMove(";", cursorPosition, movement)
         endif
     endif
-    return jsendline#cycleMap
 endfunction
 
 function! s:replaceAndMove(char, cursorPosition, movement)
@@ -140,14 +147,14 @@ function! s:getFutureNonBlankLineNum(lineNum, direction, limitLineNum)
 endfunction
 
 " Initialization
-if exists('g:jsendline#splitLineMap')
-    exec "inoremap " . g:jsendline#splitLineMap . " <C-R>=JSEndline#splitLine()<CR>"
+if exists('g:jsendline#splitLineTrigger')
+    exec "inoremap " . g:jsendline#splitLineTrigger . " <C-R>=JSEndline#splitLine()<CR>"
 endif
 
-if exists('g:jsendline#newLineMap')
-    exec "inoremap " . g:jsendline#newLineMap . " <C-R>=JSEndline#newLine()<CR>"
+if exists('g:jsendline#newLineTrigger')
+    exec "inoremap " . g:jsendline#newLineTrigger . " <C-R>=JSEndline#newLine()<CR>"
 endif
 
-if exists('g:jsendline#cycleMap')
-    exec "nmap <silent> " . g:jsendline#cycleMap . " :call JSEndline#cycle()<CR>"
+if exists('g:jsendline#cycleTrigger')
+    exec "nmap <silent> " . g:jsendline#cycleTrigger . " :call JSEndline#cycle()<CR>"
 endif
