@@ -16,9 +16,9 @@ do three things:
 
 You need to map keys yourself, like this:
 ```vim
-let g:jsendline#splitLineMap="<CR>"
-let g:jsendline#newLineMap="<S-CR>"
-let g:jsendline#cycleMap="<S-CR>"
+let g:jsendline#splitLineTrigger="<CR>"
+let g:jsendline#newLineTrigger="<S-CR>"
+let g:jsendline#cycleTrigger="<S-CR>"
 ```
 
 With the above mappings, this:
