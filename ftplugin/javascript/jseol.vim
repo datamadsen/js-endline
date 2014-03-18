@@ -30,10 +30,10 @@ function! s:replaceAndMove(char, cursorPosition, movement)
 endfunction
 
 " Initialization
-if exists('g:jsoel#insertModeTrigger')
-    exec "inoremap " . g:jsoel#insertModeEolTrigger . " <C-R>=JSEol#Eol(true)<CR>"
+if exists('g:jseol#insertModeTrigger')
+    exec "inoremap " . g:jseol#insertModeTrigger . " <C-R>=JSEol#Eol(true)<CR>"
 endif
 
-if exists('g:jsoel#normalModeTrigger')
-    exec "nmap <silent> " . g:jsoel#normalModeTrigger . " :call JSEol#Eol(false)<CR>"
+if exists('g:jseol#normalModeTrigger')
+    exec "nmap <silent> " . g:jseol#normalModeTrigger . " :call JSEol#Eol(false)<CR>"
 endif
