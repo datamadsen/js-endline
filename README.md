@@ -1,59 +1,16 @@
-js-endline
+js-eol
 ==========
 
-A vim plugin that takes a guess at, and inserts, the proper line ending
-character and then inserts a new line, either after that character or on the
-cursors current position. The plugin is made with javascript in mind, and can
-do three things:
-
-* Add line ending character and opens a new line below the current.
-
-* Add line ending character and "split" the current line and make sure that the
-  cursor is properly placed afterwards (remember to :set autoindent).
-
-* Cycle through line ending characters if the guess in one of the above wasn't
-  good enough (that would be a bug - feel free to report and fix bugs).
+A vim plugin that makes it easy, in normal mode, to add the typical end-of-line
+characters, ';' or ',', in javascript and typescript. 
 
 You need to map keys yourself, like this:
 ```vim
-let g:jsendline#splitLineTrigger="<CR>"
-let g:jsendline#newLineTrigger="<S-CR>"
-let g:jsendline#cycleTrigger="<S-CR>"
+let g:jseol#trigger="<S-CR>"
 ```
 
-With the above mappings, this:
-
-```javascript
-function hello(params) {
-    var foo = params[0|] // Press <S-CR>
-} 
-```
-
-becomes:
-
-```javascript
-function hello(params) {
-    var foo = params[0];
-    |
-} 
-```
-
-and this: 
-
-```javascript
-var myMap = {|} // Press <CR>
-```
-
-becomes:
-
-```javascript
-var myMap = {
-    |
-};
-```
-
-If the plugin makes the wrong guess, it's possible to cycle through line ending
-characters by pressing <S-CR> in normal mode, like this:
+Anywhere on a line, it's now possible to cycle through line ending characters
+by pressing <S-CR> in normal mode, like this:
 
 ```javascript
 var myMap = {}; // Press <S-CR> (in normal mode)
@@ -70,8 +27,3 @@ becomes:
 ```javascript
 var myMap = {}; // Press <S-CR> (in normal mode)
 ```
-
-And so on.
-
-The plugin makes use of a bunch of helper functions from
-[cosco.vim](https://github.com/lfilho/cosco.vim).

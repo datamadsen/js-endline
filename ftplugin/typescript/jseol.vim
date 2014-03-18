@@ -26,6 +26,6 @@ function! s:replaceAndMove(char, cursorPosition, movement)
 endfunction
 
 " Initialization
-if exists('g:jseol#normalModeTrigger')
-    exec "nmap <silent> " . g:jseol#normalModeTrigger . " :call JSEol#Eol()<CR>"
+if exists('g:jseol#trigger')
+    exec "nmap <silent> " . g:jseol#trigger . " :call JSEol#Eol()<CR>"
 endif
