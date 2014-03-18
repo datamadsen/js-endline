@@ -2,10 +2,12 @@ function! JSEol#Eol(newline)
     let cursorPosition = getpos('.')
     let currentLineLastChar = matchstr(getline('.'), '.$')
 
-    if a:newline
+    if a:newline == 1
         let movement = "\<ESC>A\<CR>"
+        return s:replaceAndMove(";", cursorPosition, movement)
     else
         let movement = ""
+    endif
 
     if currentLineLastChar == ';'
         return s:replaceAndMove(",", cursorPosition, movement)
@@ -31,9 +33,9 @@ endfunction
 
 " Initialization
 if exists('g:jseol#insertModeTrigger')
-    exec "inoremap " . g:jseol#insertModeTrigger . " <C-R>=JSEol#Eol(true)<CR>"
+    exec "inoremap " . g:jseol#insertModeTrigger . " <C-R>=JSEol#Eol(1)<CR>"
 endif
 
 if exists('g:jseol#normalModeTrigger')
-    exec "nmap <silent> " . g:jseol#normalModeTrigger . " :call JSEol#Eol(false)<CR>"
+    exec "nmap <silent> " . g:jseol#normalModeTrigger . " :call JSEol#Eol(0)<CR>"
 endif
