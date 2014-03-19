@@ -1,4 +1,4 @@
-function! JSEol#Eol()
+function! jseol#Eol()
     let cursorPosition = getpos('.')
     let currentLineLastChar = matchstr(getline('.'), '.$')
     let movement = ""
@@ -27,5 +27,5 @@ endfunction
 
 " Initialization
 if exists('g:jseol#trigger')
-    exec "nmap <silent> " . g:jseol#trigger . " :call JSEol#Eol()<CR>"
+    exec "nmap <silent> " . g:jseol#trigger . " :call jseol#Eol()<CR>"
 endif
